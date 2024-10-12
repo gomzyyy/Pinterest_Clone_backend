@@ -11,7 +11,7 @@ export const loginController = async (req, res) => {
           .status(e.BAD_REQUEST.code)
           .json({ message: "Empty fields are not allowed!", success: false });
       }
-      const user = await User.findById({ userId });
+      const user = await User.findOne({ userId });
       if (!user) {
         return res.status(e.BAD_REQUEST.code).json({
           message: "No user found with this userId.",
