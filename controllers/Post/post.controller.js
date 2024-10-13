@@ -68,12 +68,12 @@ export const postUploadController = async (req, res) => {
           success: false,
         });
       }
-
+      const tagsArray = tags.split(",").map((tag) => tag.trim()).filter(Boolean);
       const newPost = new Post({
         title: title.trim(),
         admin: user._id,
         image: imageUrl,
-        tags: Array.isArray(tags) ? tags : [],
+        tags: tagsArray,
       });
       await newPost.save();
 

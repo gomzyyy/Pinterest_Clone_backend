@@ -18,7 +18,6 @@ export const authorise = async (req, res, next) => {
           success: false,
         });
       }
-      console.log(decode);
       const UID = decode.userId;
 
       if (!UID) {
@@ -35,8 +34,6 @@ export const authorise = async (req, res, next) => {
         });
       }
       req.user = user;
-      console.log("user :",user)
-      console.log("req.user :", req.user)
       next();
     });
   } catch (error) {
