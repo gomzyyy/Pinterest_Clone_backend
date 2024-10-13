@@ -6,6 +6,8 @@ import {
   postUploadController,
   deletePostController,
 } from "./controllers/Post/post.controller.js";
+import { serveStaticData } from "./controllers/getData/serveStaticData.js";
+import { authorise } from "./middlewares/authentication.js";
 
 export {
   signupController,
@@ -14,4 +16,6 @@ export {
   updateUserController,
   postUploadController,
   deletePostController,
+  serveStaticData,
+  authorise
 };

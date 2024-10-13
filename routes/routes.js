@@ -6,20 +6,28 @@ import {
   updateUserController,
   postUploadController,
   deletePostController,
+  serveStaticData,
+  authorise
 } from "../source.js";
 import { upload } from "../middlewares/multer.js";
 
 const route = Router();
 
+// creating data
+
 route.post("/signup", signupController);
 route.post("/login", loginController);
-route.post("/user/logout", logoutController);
+route.post("/user/logout", authorise,logoutController);
 route.post(
   "/user/profile/update",
-  upload.single("avatar"),
+  upload.single("avatar"),authorise,
   updateUserController
 );
-route.post("/user/upload", upload.single("post"), postUploadController);
-route.post("/user/posts/delete:postId", deletePostController);
+route.post("/user/upload", upload.single("post"), authorise, postUploadController);
+route.post("/user/posts/delete:postId", authorise, deletePostController);
+
+// serving data 
+
+route.get("/user/get/:dataType", authorise, serveStaticData)
 
 export default route;

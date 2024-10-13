@@ -4,8 +4,8 @@ import bcrypt from "bcryptjs";
 
 export const signupController = async (req, res) => {
   try {
-    const { userName, userId, password, confirmPassword, email } = req.body;
-    if (!userName || !userId || !password || !confirmPassword || !email) {
+    const { userName, userId, password, confirmPassword } = req.body;
+    if (!userName || !userId || !password || !confirmPassword) {
       return res
         .status(e.BAD_REQUEST.code)
         .json({ message: "Empty fields are not allowed!", success: false });
@@ -22,18 +22,35 @@ export const signupController = async (req, res) => {
         success: false,
       });
     }
-    const emailOk = await User.findOne({ email });
-    if (emailOk) {
+    if(userName.length>16){
       return res.status(e.UNPROCESSABLE_ENTITY.code).json({
-        message: "User already exists with this email! Try a different one.",
+        message: "Username can't exceed 16 characters.",
         success: false,
       });
     }
+    if(userName.length<4){
+      return res.status(e.UNPROCESSABLE_ENTITY.code).json({
+        message: "Username can't be less than 4 characters.",
+        success: false,
+      });
+    }
+    if(userId.length>16){
+      return res.status(e.UNPROCESSABLE_ENTITY.code).json({
+        message: "userId can't exceed 16 characters.",
+        success: false,
+      });
+    }
+    if(userId.length<4){
+      return res.status(e.UNPROCESSABLE_ENTITY.code).json({
+        message: "userId can't be less than 4 characters.",
+        success: false,
+      });
+    }
+
     const encryptedPassword = await bcrypt.hash(password, 10);
     await User.create({
       userName,
       userId,
-      email,
       password: encryptedPassword,
     });
     return res.status(e.OK.code).json({

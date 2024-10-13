@@ -9,7 +9,6 @@ const CategoryModel = new Schema({
   },
   Others:{
     type:String,
-    maxLength:[20, "Category can't exceed 20 characters"]
   }
 })
 const Category = mongoose.model("Category", CategoryModel)
@@ -22,7 +21,6 @@ const ReportPostModel = new Schema({
   },
   Others:{
     type:String,
-    maxLength:[20, "Category can't exceed 20 characters"]
   }
 })
 const ReportPost = mongoose.model("ReportPost", ReportPostModel)
@@ -42,7 +40,6 @@ const PostModel = new Schema({
   },
   image: {
     type: String,
-    required: true,
   },
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -78,8 +75,6 @@ const PostModel = new Schema({
   description:{
     type:String,
     default:"",
-    maxLength:[300, "Description should not exceed 300 characters."],
-    minLength:[12, "Please provide more information or rather ignore the description."],
     trim:true
   },
   downloadable:{

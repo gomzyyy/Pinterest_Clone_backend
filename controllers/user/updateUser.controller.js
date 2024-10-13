@@ -1,12 +1,11 @@
 import { HTTP_STATUS_CODES as e } from "../../staticData/errorMessages.js";
 import { User } from "../../models/userModel/user.model.js";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mediaDB from "../../database/cloudinary.js";
 
 export const updateUserController = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
     const {
       userName,
       email,
@@ -17,13 +16,6 @@ export const updateUserController = async (req, res) => {
       dateOfBirth,
     } = req.body;
 
-    if (!token) {
-      return res.status(e.UNAUTHORIZED.code).json({
-        message: "Unable to update profile!",
-        success: false,
-      });
-    }
-    
     jwt.verify(token, process.env.SECRET_KEY, async (error, decode) => {
       if (error) {
         return res.status(e.UNAUTHORIZED.code).json({
@@ -60,60 +52,60 @@ export const updateUserController = async (req, res) => {
         });
       }
 
-        if (userName && user.userName !== userName) {
-            user.userName = userName.trim();
-          }
-          if (email && user.email !== email.trim()) {
-           const emailExists = await User.findOne({email});
-           if(emailExists){
-            return res.status(e.CONFLICT.code).json({
-                message:"User exixts with this email!",
-                success:false
-               })
-           }
-            user.email = email.trim();
-          }
-          if (password) {
-            user.password = await bcrypt.hash(password, 10);
-          }
-
-          if (avatar) {
-       try {
-        const uploadAvatarToCloudinary = await mediaDB(avatar);
-        if(uploadAvatarToCloudinary){
-            user.avatar = uploadAvatarToCloudinary
+      if (userName && user.userName !== userName) {
+        user.userName = userName.trim();
+      }
+      if (email && user.email !== email.trim()) {
+        const emailExists = await User.findOne({ email });
+        if (emailExists) {
+          return res.status(e.CONFLICT.code).json({
+            message: "User exixts with this email!",
+            success: false,
+          });
         }
-       } catch (uploadError) {
-        return res.status(e.UNPROCESSABLE_ENTITY.code).json({
-            message:"Error occured while updating the profile image! please try later.",
-            success:false,
-            error:uploadError.message
-        })
-       }
-        }
-          if (isPrivate !== undefined) {
-            user.isPrivate = isPrivate;
-          }
-          if (gender) {
-            user.gender = gender;
-          }
-          if (dateOfBirth) {
-            user.dateOfBirth = dateOfBirth;
-          }
-   
-        await user.save();
-        return res.status(e.OK.code).json({
-          message: "Profile updated successfully!",
-          success: true,
-        });
+        user.email = email.trim();
+      }
+      if (password) {
+        user.password = await bcrypt.hash(password, 10);
+      }
 
+      if (avatar) {
+        try {
+          const uploadAvatarToCloudinary = await mediaDB(avatar);
+          if (uploadAvatarToCloudinary) {
+            user.avatar = uploadAvatarToCloudinary;
+          }
+        } catch (uploadError) {
+          return res.status(e.UNPROCESSABLE_ENTITY.code).json({
+            message:
+              "Error occured while updating the profile image! please try later.",
+            success: false,
+            error: uploadError.message,
+          });
+        }
+      }
+      if (isPrivate !== undefined) {
+        user.isPrivate = isPrivate;
+      }
+      if (gender) {
+        user.gender = gender;
+      }
+      if (dateOfBirth) {
+        user.dateOfBirth = dateOfBirth;
+      }
+
+      await user.save();
+      return res.status(e.OK.code).json({
+        message: "Profile updated successfully!",
+        success: true,
+      });
     });
   } catch (error) {
     console.log(error);
     return res.status(e.INTERNAL_SERVER_ERROR.code).json({
-        message: "An error occurred while updating the profile.",
-        success: false,
-        error: error.message,
-      });
+      message: "An error occurred while updating the profile.",
+      success: false,
+      error: error.message,
+    });
   }
 };

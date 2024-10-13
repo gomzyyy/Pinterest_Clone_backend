@@ -18,9 +18,7 @@ const UserModel = new Schema(
   {
     userName: {
       type: String,
-      required: [true, "Username is required."],
-      maxLength: [16, "Username can't exceed 16 characters."],
-      minLength: [4, "Username can't be less than 4 characters."],
+      required: [true, "Username is required."]
     },
     userId: {
       type: String,
@@ -28,13 +26,11 @@ const UserModel = new Schema(
       unique: true
     },
     email: {
-      type: String,
-      unique: true,
+      type: String||null,
       validate: {
         validator: (v) => emailRegex.test(v),
         message: (props) => `${props.value} is not a valid email!`,
       },
-      required:[true, "Email is required!"]
     },
     password: {
       type: String,
