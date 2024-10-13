@@ -7,6 +7,7 @@ import {
   postUploadController,
   deletePostController,
   serveStaticData,
+  servePosts,
   authorise
 } from "../source.js";
 import { upload } from "../middlewares/multer.js";
@@ -28,6 +29,7 @@ route.post("/user/posts/delete:postId", authorise, deletePostController);
 
 // serving data 
 
+route.get("/user/get-posts", authorise, servePosts)
 route.get("/user/get/:dataType", authorise, serveStaticData)
 
 export default route;

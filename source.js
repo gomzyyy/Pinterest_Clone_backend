@@ -8,6 +8,7 @@ import {
 } from "./controllers/Post/post.controller.js";
 import { serveStaticData } from "./controllers/getData/serveStaticData.js";
 import { authorise } from "./middlewares/authentication.js";
+import { servePosts } from "./controllers/getData/servePosts.js";
 
 export {
   signupController,
@@ -17,5 +18,6 @@ export {
   postUploadController,
   deletePostController,
   serveStaticData,
+  servePosts,
   authorise
 };

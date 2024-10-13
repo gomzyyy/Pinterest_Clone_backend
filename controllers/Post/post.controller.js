@@ -77,7 +77,7 @@ export const postUploadController = async (req, res) => {
       });
       await newPost.save();
 
-      user.posts.push(newPost._id);
+      user.posts.unshift(newPost._id);
 
       await user.save();
       return res.status(e.OK.code).json({

@@ -4,6 +4,7 @@ import { User } from "../models/userModel/user.model.js";
 
 export const authorise = async (req, res, next) => {
   try {
+    console.log("requested")
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(e.UNAUTHORIZED.code).json({
