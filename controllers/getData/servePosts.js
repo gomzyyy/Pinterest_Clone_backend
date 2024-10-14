@@ -4,7 +4,7 @@ import { HTTP_STATUS_CODES as e } from "../../staticData/errorMessages.js";
 export const servePosts = async (req, res) => {
   try {
     console.log("requested")
-    const posts = await Post.find();
+    const posts = await Post.find().populate('admin');
     if (!posts) {
       return res.status(e.NOT_FOUND.code).json({
         message: "No posts available.",

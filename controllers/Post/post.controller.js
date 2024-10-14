@@ -9,13 +9,13 @@ export const postUploadController = async (req, res) => {
   try {
     const { title, tags } = req.body;
     const imagePath = req.file.path;
+    const user = req.user;
     if (!imagePath) {
       return res.status(404).json({
         message: "Media not found",
         success: false,
       });
     }
-    const token = req.headers.authorization?.split(" ")[1];
 
     console.log(imagePath)
 
@@ -31,16 +31,6 @@ export const postUploadController = async (req, res) => {
         success: false,
       });
     }
-
-    jwt.verify(token, process.env.SECRET_KEY, async (error, decode) => {
-      if (error) {
-        return res.status(e.UNAUTHORIZED.code).json({
-          message: "Invalid token",
-          success: false,
-        });
-      }
-      const UID = decode.userId;
-      const user = await User.findById(UID);
       if (!user) {
         return res.status(e.NOT_FOUND.code).json({
           message: "Can't find the user credientials.",
@@ -49,7 +39,6 @@ export const postUploadController = async (req, res) => {
       }
       let imageUrl;
       try {
-        console.log("uploading started")
         const uploadPostImageToCloudinary = await mediaDB(imagePath);
         if (uploadPostImageToCloudinary) {
           imageUrl = uploadPostImageToCloudinary;
@@ -84,7 +73,6 @@ export const postUploadController = async (req, res) => {
         message: "Post created success!",
         success: true,
       });
-    });
   } catch (error) {
     console.log(error)
     return res.status(e.INTERNAL_SERVER_ERROR.code).json({

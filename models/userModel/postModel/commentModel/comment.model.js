@@ -1,10 +1,10 @@
 import mongoose, { Schema } from "mongoose";
-import { ReportComments } from "../../../../staticData/constants.js";
+import { ReportCommentsEnum } from "../../../../staticData/constants.js";
 
 const ReportCommentModel = new Schema({
   reportType: {
     type: String,
-    enum: ReportComments,
+    enum: ReportCommentsEnum,
     default: "Spam",
   },
   Others: {

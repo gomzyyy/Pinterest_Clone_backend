@@ -6,6 +6,7 @@ import {
   updateUserController,
   postUploadController,
   deletePostController,
+  postActionsController,
   serveStaticData,
   servePosts,
   authorise
@@ -25,7 +26,8 @@ route.post(
   updateUserController
 );
 route.post("/user/upload", upload.single("post"), authorise, postUploadController);
-route.post("/user/posts/delete:postId", authorise, deletePostController);
+route.post("/user/posts/delete/:postId", authorise, deletePostController);
+route.post("/user/posts/post/update/:postId", authorise, postActionsController)
 
 // serving data 
 

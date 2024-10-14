@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { CategoriesEnum, ReportPostEnum } from "../../../staticData/constants.js";
 
-const CategoryModel = new Schema({
+export const CategoryModel = new Schema({
   category:{
     type:String,
     enum:CategoriesEnum,
@@ -13,7 +13,7 @@ const CategoryModel = new Schema({
 })
 const Category = mongoose.model("Category", CategoryModel)
 
-const ReportPostModel = new Schema({
+export const ReportPostModel = new Schema({
   reportType:{
     type:String,
     enum:ReportPostEnum,
@@ -24,7 +24,6 @@ const ReportPostModel = new Schema({
   }
 })
 const ReportPost = mongoose.model("ReportPost", ReportPostModel)
-
 
 const PostModel = new Schema({
   title: {
